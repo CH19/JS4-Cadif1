@@ -1,0 +1,4 @@
+*.rar
+*.zip
+./Piramides/.vscode/settings.json
+holi.txt
