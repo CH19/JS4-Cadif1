@@ -1,12 +1,12 @@
 'use strict';
 $(function(){
 // Practice of objetct creating class one 
-let player = new Object();
-player.name = '';
-player.email = '';
-player.password = '';
-player.phone = '';
-const namePlayer = Object.keys(player);
+let user = new Object();
+user.name = '';
+user.email = '';
+user.password = '';
+user.phone = '';
+const namePlayer = Object.keys(user);
 //Arreglo para obtener los Strings de los valores del formulario
 const valueForms = []
 const header = document.querySelector('header');
@@ -55,7 +55,7 @@ header.innerHTML = `
 // console.log(valueForms)
 // Funcion para crear los elementos del formulario de control de manera reusable 
 function createForm(comunicador, inputType, mensaje){
-  // player = {comunicador: ''};
+  // user = {comunicador: ''};
   let estructura = `
     <div class="mb-3">
     <label for="${comunicador}Input" class="form-label">${comunicador}</label>
@@ -72,9 +72,9 @@ function createForm(comunicador, inputType, mensaje){
   $('#sendButton').click(function(event){
     event.preventDefault();
     valueForms.forEach(value=>{
-      player[value] = $(`#${value}Input`).val()
+      user[value] = $(`#${value}Input`).val()
     })
-    console.log(player);
+    console.log(user);
     console.log();
   });
   // valueForms.forEach(function(value){
