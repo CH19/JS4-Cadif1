@@ -1,18 +1,36 @@
 'use strict';
-$(function(){
-// Practice of objetct creating class one 
+const valueForms = []
 let user = new Object();
 user.name = '';
 user.email = '';
 user.password = '';
 user.phone = '';
-const namePlayer = Object.keys(user);
-//Arreglo para obtener los Strings de los valores del formulario
-const valueForms = []
 const header = document.querySelector('header');
 header.classList.add('d-flex')
 header.classList.add('justify-content-around')
-header.classList.add('h-50');
+header.classList.add('align-items-center')
+const main = document.querySelector('main');
+$(function(){
+// Practice of objetct creating class one 
+// Objetos 
+// Asignacion de Funciones constructoras 
+function jugador(){
+  this.usuario = 'chris'; //Esta forma de hacer funciones sirve para ya cargar un objeto y al momento de crearlo tener parametros establecidos
+  this.email = '';
+  this.password = '';
+  this.phone = '';
+}
+const imagenes = {
+  direcciones: [],
+  titulo: []
+}
+function jugada(seleccion, jugador){
+  this.seleccion = seleccion;
+  this.jugador = jugador;
+}
+const namePlayer = Object.keys(user);
+//Arreglo para obtener los Strings de los valores del formulario
+// header.classList.add('h-50');
   let Formestrucutra = `
   <form id="formu1">
   ${createForm(namePlayer[0],'text','Introduce tú nombre')}
@@ -28,9 +46,9 @@ header.classList.add('h-50');
   `;
 header.innerHTML = `
 <figure style="width: 200px; height: 100px;">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Google_Play_Arrow_logo.svg/1200px-Google_Play_Arrow_logo.svg.png" style="width: fit-content; height: 200px;" alt="">
+<img src="./Anexos/Google_Play-Logo.wine.svg" style="width: 100px; height: 100px;" alt="">
 </figure>
-<button type="button" class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" class="btn btn-primary h-100 rounded" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Registrarte
 </button>
 
@@ -51,34 +69,62 @@ header.innerHTML = `
     </div>
   </div>
 </div>
-`
+`;
+
 // console.log(valueForms)
 // Funcion para crear los elementos del formulario de control de manera reusable 
-function createForm(comunicador, inputType, mensaje){
-  // user = {comunicador: ''};
-  let estructura = `
-    <div class="mb-3">
-    <label for="${comunicador}Input" class="form-label">${comunicador}</label>
-    <input type="${inputType}" class="form-control" id="${comunicador}Input" required>
-    <div id="${comunicador}Help" class="form-text">${mensaje}</div>
-  </div>
-    `
-    // Se agrega el nombre del id de los formularios y los label a un arreglo para usarlo mas tarde 
-    valueForms.push(comunicador);
-    // se retorna la estructura en forma de string para usarlo de forma en componente en el innerhtml 
-    return estructura
-}
 // Se prueba el vlaue del formulario para ver si se almacena y se muestra 
-  $('#sendButton').click(function(event){
-    event.preventDefault();
-    valueForms.forEach(value=>{
-      user[value] = $(`#${value}Input`).val()
-    })
-    console.log(user);
-    console.log();
-  });
-  // valueForms.forEach(function(value){
-  //   console.log('hola ' + value)
-  // })
+// $('#sendButton').on('submit',function(event){
+document.getElementById('formu1').addEventListener('submit', (event)=>{
+  event.preventDefault();
+  event.stoppropagation();
+  valueForms.forEach(value=>{
+    user[value] = $(`#${value}Input`).val()
+  })
+  console.log(user);
+  console.log();
+  welcomeUser(user['name']);
 
 })
+// });
+  // valueForms.forEach(function(value){
+    //   console.log('hola ' + value)
+    // })
+    
+  })
+  
+  // Main 
+  main.innerHTML = `
+
+  ${createJugada('Holi')}
+  `
+  function createForm(comunicador, inputType, mensaje){
+    // user = {comunicador: ''};
+    let estructura = `
+      <div class="mb-3">
+      <label for="${comunicador}Input" class="form-label">${comunicador}</label>
+      <input type="${inputType}" class="form-control" id="${comunicador}Input" required>
+      <div id="${comunicador}Help" class="form-text">${mensaje}</div>
+    </div>
+      `
+      // Se agrega el nombre del id de los formularios y los label a un arreglo para usarlo mas tarde 
+      valueForms.push(comunicador);
+      // se retorna la estructura en forma de string para usarlo de forma en componente en el innerhtml 
+      return estructura
+  }
+  function createJugada(mensaje){
+    const estructura = `
+    <div>
+    <input type="text" placeholder="${(mensaje) ? mensaje: 'Realiza la jugada'}" class="form-control">
+    <button class="btn btn-success">${(mensaje) ?  mensaje: 'enviar'}</button>
+    </div>
+    `
+    return estructura;
+  }
+  function welcomeUser(name){
+    if(user.name != ''){
+    main.append(document.createElement('h1').textContent = `Bienvenido ${user.name}`);
+  }else{
+   main.append(document.createElement('h1').textContent = 'Es necesario que te registres')
+  }
+  }
