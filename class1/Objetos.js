@@ -20,6 +20,26 @@ function jugador(){
   this.password = '';
   this.phone = '';
 }
+// Practicando la creacion de objetos 
+class persona{
+  constructor(name, age, id) {
+    this.name = name;
+    this.age = age;
+    this.id = id; 
+  }
+  saludar(){
+    console.log('Hola min nombre es ' + this.name);
+  }
+  cambiarNombre(newName){
+    this.name = newName
+  }
+}
+//Probando creacion de un objeto persona, primeros metodos y getters con setters 
+let a = new persona('christian', 17, '243234');
+console.log(a);
+a.saludar();
+a.cambiarNombre('Pedro');
+a.saludar();
 const imagenes = {
   direcciones: [],
   titulo: []
