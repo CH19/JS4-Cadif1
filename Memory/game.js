@@ -27,10 +27,10 @@ class User
     }
     updateScore(score, op, val){
         if (op == 'sumar'){
-            score = score + val;
+            score =+ val;
         }
         if (op == 'restar'){
-            score = score - val;
+            score =- val;
         }
         if (op == 'multiplicar'){
             score = score * val;
