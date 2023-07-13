@@ -12,6 +12,11 @@ header.classList.add('d-flex')
 header.classList.add('justify-content-around')
 header.classList.add('align-items-center')
 const main = document.querySelector('main');
+let users;
+ fetch('http://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(json =>{ users = json; console.log(users);});
+;
 $(function(){
 // Practice of objetct creating class one 
 // Objetos 
@@ -47,8 +52,11 @@ const namePlayer = Object.keys(user);
 //Arreglo para obtener los Strings de los valores del formulario
 // header.classList.add('h-50');
 
-  let IniciarSesionEstructura = `
-  <form id="SignIn">
+ 
+//Pagina
+
+let IniciarSesionEstructura = `
+  <form id="signInForm">
   ${pagina.createForm(`${namePlayer[0]}Sesion`, 'text', 'Introduce tu nombre de usuario')}
   ${pagina.createForm(`${namePlayer[2]}Sesion`, 'text', 'Introduce tu contrasenna')}
   
@@ -74,11 +82,15 @@ header.innerHTML = `
 <img src="./Anexos/Google_Play-Logo.wine.svg" style="width: 100px; height: 100px;" alt="">
 </figure>
 `;
-$(header).append(modalStructure(IniciarSesionEstructura, 'SignIn'));
-$(header).append(modalStructure(formestrucutra, 'Registrarse'));
+$(header).append(pagina.modalStructure(IniciarSesionEstructura, 'SignIn'));
+$(header).append(pagina.modalStructure(formestrucutra, 'Registrarse'));
 
 // Funcion para crear los elementos del formulario de control de manera reusable 
 // Se prueba el vlaue del formulario para ver si se almacena y se muestra 
+
+
+// Logica
+
 document.getElementById('formu1').addEventListener('submit', (event)=>{
   event.preventDefault();
   // event.stoppropagation();
@@ -90,39 +102,24 @@ document.getElementById('formu1').addEventListener('submit', (event)=>{
   welcomeUser(user['name']);
 
 })
-  })
+})
+//Se coloca esto poque de otra forma el dom no reconoce el formulario con el Sid signInForm
+window.addEventListener('load', ()=>{
+//Se utiliza el event listener para cargar el evento y utilizar la informacion para validarla y decir que esta en el json
+  document.getElementById('signInForm')?.addEventListener('submit',(event)=>{
+    event.preventDefault();
+    console.log($(`#${Object.keys(user)[0]}SesionInput`).val());
+    verificarLogueo($(`#${Object.keys(user)[0]}SesionInput`).val(), users, 'username')
+
+  });
+})
   
   // Main 
   main.innerHTML = `
 
   ${pagina.createJugada()}
   `
-  function  modalStructure(contenido, mensajeButton){
-    let  estructura = `
-      <button type="button" class="btn btn-primary h-100 rounded" data-bs-toggle="modal" data-bs-target="#${mensajeButton}staticBackdrop">
-      ${mensajeButton ? mensajeButton : 'Registrarte'}
-  </button>
-  
-  <div class="modal fade" id="${mensajeButton}staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="${mensajeButton}staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="${mensajeButton}staticBackdropLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          ${contenido}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Understood</button>
-        </div>
-      </div>
-    </div>
-  </div>
-      `
-      return estructura;
-    }
+
   function welcomeUser(name){
     if(name != ''){
     main.append(document.createElement('h1').textContent = `Bienvenido ${name}`);
@@ -130,10 +127,34 @@ document.getElementById('formu1').addEventListener('submit', (event)=>{
    main.append(document.createElement('h1').textContent = 'Es necesario que te registres')
   }
   }
-var users;
- fetch('http://jsonplaceholder.typicode.com/users')
-  .then(response => response.json())
-  .then(json =>{ users = json;});
-;
+ function verificarLogueo(value, data, dataSearch){
+  console.log('Verificar logueo funcionando!!');
+  //Se busca en el json si hay una informacion del value buscado que puede ser el value de un input o otro valor, el parametro datasearch es para el atributo json del objeto y comparar su existencia
+  let ubicado = data.find(e => e[dataSearch] == value)
+  if(!ubicado){
+    alert(`${dataSearch} no encontrado`);
+  }else{
+    validarContrasenna($(`#${Object.keys(user)[2]}SesionInput`).val(), ubicado, 'id');
+    //Probando convertir un JSON a String
+    //  ubicadoString = JSON.stringify(ubicado);
+    // probando LocalStroage 
+    localStorage.setItem('serActivate',JSON.stringify(ubicado))
+    console.log(JSON.parse(localStorage.getItem('serActivate')));
+   //con try y catch nos aseguramos de que si sucede un error en el codigo, el programa no se rompa
+    try{
+      console.log(JSON.parse(ubicadoString));
 
-
+    }catch{
+      console.log('errror');
+    }
+  }
+  
+ }
+function validarContrasenna(value, data, dataSearch){
+  console.log(data[dataSearch]);
+  if((value != data[dataSearch])){
+    alert(`${dataSearch} inexistente o incorrecto`)
+  }else{
+    console.log('Info correcta');
+  }
+}
